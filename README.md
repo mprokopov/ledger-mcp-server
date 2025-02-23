@@ -46,6 +46,8 @@ npx @modelcontextprotocol/inspector \
   ledger-service
 ```
 
+![MCP Inspector debugging interface](mcp-server-debug.png)
+
 ### Configure Claude Desktop
 
 Add the server configuration to Claude Desktop's config file:
