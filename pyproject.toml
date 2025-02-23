@@ -1,0 +1,30 @@
+[project]
+name = "ledger-service"
+version = "0.1.0"
+description = "MCP Server for My Ledger"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+ "httpx>=0.28.1",
+ "mcp>=1.1.0",
+ "myledger",
+ "python-dotenv>=1.0.1",
+]
+[[project.authors]]
+name = "Maksym Prokopov"
+email = "mprokopov@gmail.com"
+
+[build-system]
+requires = [ "hatchling",]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+]
+
+[tool.uv.sources]
+myledger = { path = "../ledger/python/myledger" }
+
+[project.scripts]
+ledger-service = "ledger_service:main"
