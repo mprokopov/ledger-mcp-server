@@ -1,51 +1,68 @@
 # ledger-service MCP server
 
-MCP Server for My Ledger
+MCP Server for accessing and managing ledger files through Claude.
 
 ## Components
 
-### Resources
-
-The server implements a simple note storage system with:
-- Custom note:// URI scheme for accessing individual notes
-- Each note resource has a name, description and text/plain mimetype
-
-### Prompts
-
-The server provides a single prompt:
-- summarize-notes: Creates summaries of all stored notes
-  - Optional "style" argument to control detail level (brief/detailed)
-  - Generates prompt combining all current notes with style preference
-
 ### Tools
 
-The server implements one tool:
-- add-note: Adds a new note to the server
-  - Takes "name" and "content" as required string arguments
-  - Updates server state and notifies clients of resource changes
+The server implements three tools for ledger management:
 
-## Configuration
+- **list-accounts**: Lists all accounts in the ledger
+  - Takes "year" as a required argument
+  - Returns formatted list of all available accounts
 
-[TODO: Add configuration details specific to your implementation]
+- **account-balance**: Gets the balance for a specific account
+  - Takes "year" and "account" as required arguments
+  - Returns the current balance for the specified account
 
-## Quickstart
+- **account-register**: Shows the transaction register for an account
+  - Takes "year" and "account" as required arguments
+  - Returns detailed transaction history for the specified account
 
-### Install
+## Installation
 
-#### Claude Desktop
+### Prerequisites
+
+- Python 3.13 or higher
+- `uv` package manager
+- Node.js and npm (for debugging)
+
+### Install from PyPI
+
+```bash
+uv pip install ledger-service
+```
+
+## Debugging
+
+Using the inspector to debug the server:
+
+```bash
+npx @modelcontextprotocol/inspector \
+  uv \
+  --directory /path/to/ledger-service \
+  run \
+  ledger-service
+```
+
+### Configure Claude Desktop
+
+Add the server configuration to Claude Desktop's config file:
 
 On MacOS: `~/Library/Application\ Support/Claude/claude_desktop_config.json`
 On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 
 <details>
-  <summary>Development/Unpublished Servers Configuration</summary>
-  ```
+  <summary>Development Configuration</summary>
+  
+  ```json
   "mcpServers": {
     "ledger-service": {
       "command": "uv",
       "args": [
         "--directory",
-        "/Users/maksymprokopov/personal/ledger-service",
+        "/path/to/ledger-service",
         "run",
         "ledger-service"
       ]
@@ -55,8 +72,9 @@ On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 </details>
 
 <details>
-  <summary>Published Servers Configuration</summary>
-  ```
+  <summary>Production Configuration</summary>
+  
+  ```json
   "mcpServers": {
     "ledger-service": {
       "command": "uvx",
@@ -70,42 +88,15 @@ On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 
 ## Development
 
-### Building and Publishing
+### Local Setup
 
-To prepare the package for distribution:
-
-1. Sync dependencies and update lockfile:
-```bash
-uv sync
-```
-
-2. Build package distributions:
-```bash
-uv build
-```
-
-This will create source and wheel distributions in the `dist/` directory.
-
-3. Publish to PyPI:
-```bash
-uv publish
-```
-
-Note: You'll need to set PyPI credentials via environment variables or command flags:
-- Token: `--token` or `UV_PUBLISH_TOKEN`
-- Or username/password: `--username`/`UV_PUBLISH_USERNAME` and `--password`/`UV_PUBLISH_PASSWORD`
-
-### Debugging
-
-Since MCP servers run over stdio, debugging can be challenging. For the best debugging
-experience, we strongly recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector).
+1. Clone the repository
+2. Create and activate a virtual environment
+3. Install dependencies:
 
 
-You can launch the MCP Inspector via [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) with this command:
+The base path can be configured by modifying the `LEDGER_BASE_PATH` constant in `server.py`.
 
-```bash
-npx @modelcontextprotocol/inspector uv --directory /Users/maksymprokopov/personal/ledger-service run ledger-service
-```
+## License
 
-
-Upon launching, the Inspector will display a URL that you can access in your browser to begin debugging.
+GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
